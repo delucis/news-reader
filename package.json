@@ -3,28 +3,6 @@
   "description": "Download in-ear audio for “I began the day…”",
   "author": "Chris Swithinbank <swithinbank@gmail.com> (http://chrisswithinbank.net/)",
   "license": "GPL-3.0",
-  "scripts": {
-    "prerelease": "npm t",
-    "release": "standard-version -s",
-    "postrelease": "npm publish && git push --follow-tags",
-    "pretest": "standard",
-    "test": "nyc ava",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
-  },
-  "devDependencies": {
-    "ava": "3.0.0",
-    "commitizen": "4.0.3",
-    "coveralls": "3.0.9",
-    "cz-conventional-changelog": "3.0.2",
-    "nyc": "15.0.0",
-    "standard": "14.3.1",
-    "standard-version": "7.0.1"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/delucis/news-reader.git"
