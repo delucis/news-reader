@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>news reader :: i began the day</title>
+    <meta name="description" content="Audio cue playback for “I began the day inside the world trying to look at it, but it was lying on my face, making it hard to see.”">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="theme-color" content="#00f" />
+    <meta name="msapplication-navbutton-color" content="#00f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#black-translucent">
+    <style>
+      @font-face {
+        font-family: 'gt_cinetyperegular';
+        src: url('/fonts/gt-cinetype-regular-webfont.woff2') format('woff2'),
+             url('/fonts/gt-cinetype-regular-webfont.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      html { font-size: 100%; line-height: 1.5; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: 'gt_cinetyperegular', sans-serif; padding: 5%; background: #00f; color: #ff0; }
+      h1 { font-weight: 400; line-height: 1; margin: 1em 0; }
+      button { display: block; font-size: 1em; padding: .5em; font-family: 'gt_cinetyperegular'; }
+      audio, button { margin: 1em auto; width: 100%; }
+      a { color: #f96; }
+      .mt-5 { margin-top: 5em; }
+      .ta-c { text-align: center; }
+      .info { color: #aa0; }
+      .error { color: #f6f; }
+      @media (min-width: 40em) { html { font-size: 200%; } }
+    </style>
+  </head>
+  <body>
+    <header>
+      I began the day inside the world trying to look at it, but it was lying on my face, making it hard to see.
+    </header>
+    <section role="main">
+      <h1>
+        News Reader
+      </h1>
+      <div class="page" id="app">
+        <div v-if="hasAudio" class="audio">
+          <audio :src="audioUrl" controls>
+            Looks like your browser doesn’t support the <code><audio></code> element :-(
+          </audio>
+          <p class="mt-5 ta-c">
+            💾 <a :href="audioUrl" download>Download audio file</a>
+          </p>
+        </div>
+        <div v-else class="loader">
+          <button type="button" name="get-audio" @click="getAudio" v-text="buttonText"/>
+        </div>
+      </div>
+    </section>
+    <footer class="mt-5 ta-c">📰 😬</footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script type="text/javascript">
+      new Vue({
+        el: '#app',
+        data: {
+          audioUrl: null,
+          buttonText: 'Load audio',
+          fileCount: 5,
+        },
+        computed: {
+          hasAudio: function () { return typeof this.audioUrl === 'string' },
+        },
+        methods: {
+          urn: function () {
+            return Math.floor(Math.random() * this.fileCount)
+          },
+          getAudio: function () {
+            Vue.set(this, 'audioUrl', `/audio/${this.urn()}.mp3`)
+          },
+        }
+      })
+    </script>
+  </body>
+</html>
