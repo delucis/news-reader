@@ -65,13 +65,44 @@
           audioUrl: null,
           buttonText: 'Load audio',
           fileCount: 101,
+          storageKey: 'seenFiles',
         },
         computed: {
           hasAudio: function () { return typeof this.audioUrl === 'string' },
+          files: function () {
+            return Array(this.fileCount)
+              .fill()
+              .map(function (_, i) {
+                return i
+              })
+          },
         },
         methods: {
+          getSeen: function () {
+            try {
+              var json = window.localStorage.getItem(this.storageKey)
+              if (!json) return []
+              var seen = JSON.parse(json)
+              // reset if the browser has downloaded all files
+              if (seen.length >= this.fileCount) return []
+              return seen
+            } catch (_) { return [] }
+          },
+          setSeen: function (seen) {
+            try {
+              window.localStorage.setItem(this.storageKey, JSON.stringify(seen))
+            } catch (_) { /* nothing set, no worries */ }
+          },
           urn: function () {
-            return Math.floor(Math.random() * this.fileCount)
+            var seen = this.getSeen()
+            var unseenFiles = this.files.filter(function (i) {
+              return !seen.includes(i)
+            })
+            var pick = Math.floor(Math.random() * unseenFiles.length)
+            var fileIndex = unseenFiles[pick]
+            seen.push(fileIndex)
+            this.setSeen(seen)
+            return fileIndex
           },
           getAudio: function () {
             Vue.set(this, 'audioUrl', `/audio/${this.urn()}.mp3`)
