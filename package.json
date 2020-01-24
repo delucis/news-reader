@@ -4,7 +4,7 @@
   "author": "Chris Swithinbank <swithinbank@gmail.com> (http://chrisswithinbank.net/)",
   "license": "GPL-3.0",
   "scripts": {
-    "build": "npm run build:css & npm run build:htm & npm run build:app",
+    "build": "npm run build:css && npm run build:htm && npm run build:app",
     "dev": "concurrently --names \"css,htm,app\" npm:dev:css npm:dev:htm npm:dev:app",
     "build:css": "postcss src/style.css --no-map -u autoprefixer cssnano -o public/style.css",
     "build:htm": "html-minifier --collapse-whitespace --remove-comments --remove-attribute-quotes --sort-attributes --sort-class-name src/index.html -o public/index.html",
