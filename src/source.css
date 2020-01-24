@@ -63,14 +63,6 @@ a {
   text-align: center;
 }
 
-.info {
-  color: #c2c200;
-}
-
-.error {
-  color: #f6f;
-}
-
 .audio {
   position: relative;
   height: 12em;
