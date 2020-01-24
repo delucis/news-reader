@@ -6,9 +6,9 @@
   "scripts": {
     "build": "npm run build:css & npm run build:htm & npm run build:app",
     "dev": "concurrently --names \"css,htm,app\" npm:dev:css npm:dev:htm npm:dev:app",
-    "build:css": "postcss src/source.css --no-map -u autoprefixer cssnano -o src/style.css",
-    "build:htm": "html-minifier --collapse-whitespace --remove-comments --remove-attribute-quotes --sort-attributes --sort-class-name src/index-source.html -o src/index.html",
-    "build:app": "terser src/app-source.js -o src/app.js",
+    "build:css": "postcss src/style.css --no-map -u autoprefixer cssnano -o public/style.css",
+    "build:htm": "html-minifier --collapse-whitespace --remove-comments --remove-attribute-quotes --sort-attributes --sort-class-name src/index.html -o public/index.html",
+    "build:app": "terser src/app.js -o public/app.js",
     "dev:css": "npm run build:css -- -w",
     "dev:htm": "chokidar src/index-source.html -c \"npm run build:htm\"",
     "dev:app": "chokidar src/app-source.js -c \"npm run build:app\""

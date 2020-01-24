@@ -1,4 +1,4 @@
 node_modules
-src/style.css
-src/app.js
-src/index.html
+public/style.css
+public/app.js
+public/index.html
