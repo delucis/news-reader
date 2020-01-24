@@ -34,10 +34,22 @@
       button { display: block; font-size: 1em; padding: .5em; font-family: 'gt_cinetyperegular'; }
       audio, button { margin: 1em auto; width: 100%; }
       a { color: #fa8; }
+      .mt-2 { margin-top: 2em; }
       .mt-5 { margin-top: 5em; }
       .ta-c { text-align: center; }
       .info { color: #aa0; }
       .error { color: #f6f; }
+      .audio { position: relative; height: 12em; }
+      .fade-item { position: absolute; width: 100%; }
+      .fade-enter-active {
+        transition: opacity .4s .15s ease-in, transform .4s .15s ease-out;
+      }
+      .fade-leave-active {
+        transition: opacity .3s ease-out, transform .3s ease-in;
+      }
+      .fade-enter, .fade-leave-to { opacity: 0; }
+      .fade-enter { transform: scaleX(0) scaleY(0.7) translateY(12em); }
+      .fade-leave-to { transform: scaleX(0.4) scaleY(0.7) translateY(-12em); }
       @media (min-width: 40em) { html { font-size: 200%; } }
     </style>
   </head>
@@ -50,33 +62,56 @@
         News Reader
       </h1>
       <div class="page" id="app">
-        <div v-if="hasAudio" class="audio">
-          <audio :src="audioUrl" controls>
-            Looks like your browser doesn’t support the <code><audio></code> element :-(
-          </audio>
-          <p class="mt-5 ta-c">
-            💾 <a :href="audioUrl" download>Download audio file</a>
-          </p>
-        </div>
-        <div v-else class="loader">
-          <button type="button" name="get-audio" @click="getAudio" v-text="buttonText"/>
-        </div>
+        <transition-group v-if="hasAudio" class="audio" name="fade" tag="div">
+          <div v-for="file in currentFiles" :key="file.title" class="fade-item">
+            <p v-text="file.title"></p>
+            <audio :src="file.url" controls>
+              Looks like your browser doesn’t support the <code><audio></code> element :-(
+            </audio>
+            <p class="mt-2 ta-c">
+              💾 <a :href="file.url" download>Download audio file</a>
+            </p>
+          </div>
+        </transition-group>
+        <button type="button" name="get-audio" @click="getAudio" v-text="buttonText"/>
       </div>
     </section>
     <footer class="mt-5 ta-c">📰 😬</footer>
 
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script type="text/javascript">
+      var storageKey = 'seenFiles'
+      var fileCount = 251
+
+      function getSeenCache () {
+        try {
+          var json = window.localStorage.getItem(storageKey)
+          if (!json) return []
+          var seen = JSON.parse(json)
+          // reset if the browser has downloaded all files
+          if (seen.length >= fileCount) return []
+          return seen
+        } catch (_) { return [] }
+      }
+
       new Vue({
         el: '#app',
         data: {
-          audioUrl: null,
-          buttonText: 'Load audio',
-          fileCount: 251,
-          storageKey: 'seenFiles',
+          currentFile: null,
+          fileCount,
+          seen: getSeenCache(),
+          storageKey,
         },
         computed: {
-          hasAudio: function () { return typeof this.audioUrl === 'string' },
+          buttonText: function () {
+            return this.hasAudio ?
+              '🔄 Get a new audio file' :
+              '🎧 Load audio'
+          },
+          currentFiles: function () { return [{
+            url: `/audio/${this.currentFile}.mp3`,
+            title: `#${this.currentFile}`,
+          }] },
           files: function () {
             return Array(this.fileCount)
               .fill()
@@ -84,36 +119,29 @@
                 return i
               })
           },
+          hasAudio: function () { return this.currentFile !== null },
         },
         methods: {
-          getSeen: function () {
+          addToSeen: function (i) {
+            this.seen.push(i)
+            if (this.seen.length >= this.fileCount) this.seen = []
             try {
-              var json = window.localStorage.getItem(this.storageKey)
-              if (!json) return []
-              var seen = JSON.parse(json)
-              // reset if the browser has downloaded all files
-              if (seen.length >= this.fileCount) return []
-              return seen
-            } catch (_) { return [] }
-          },
-          setSeen: function (seen) {
-            try {
-              window.localStorage.setItem(this.storageKey, JSON.stringify(seen))
+              var json = JSON.stringify(this.seen)
+              window.localStorage.setItem(this.storageKey, json)
             } catch (_) { /* nothing set, no worries */ }
           },
           urn: function () {
-            var seen = this.getSeen()
+            var seen = this.seen
             var unseenFiles = this.files.filter(function (i) {
               return !seen.includes(i)
             })
             var pick = Math.floor(Math.random() * unseenFiles.length)
             var fileIndex = unseenFiles[pick]
-            seen.push(fileIndex)
-            this.setSeen(seen)
+            this.addToSeen(fileIndex)
             return fileIndex
           },
           getAudio: function () {
-            Vue.set(this, 'audioUrl', `/audio/${this.urn()}.mp3`)
+            Vue.set(this, 'currentFile', this.urn())
           },
         }
       })
