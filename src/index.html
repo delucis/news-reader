@@ -61,19 +61,13 @@
       <h1>
         News Reader
       </h1>
-      <div class="page" id="app">
-        <transition-group v-if="hasAudio" class="audio" name="fade" tag="div">
-          <div v-for="file in currentFiles" :key="file.title" class="fade-item">
-            <p v-text="file.title"></p>
-            <audio :src="file.url" controls>
-              Looks like your browser doesn’t support the <code><audio></code> element :-(
-            </audio>
-            <p class="mt-2 ta-c">
-              💾 <a :href="file.url" download>Download audio file</a>
-            </p>
-          </div>
-        </transition-group>
-        <button type="button" name="get-audio" @click="getAudio" v-text="buttonText"/>
+      <div id="app">
+        <app>
+          <p class="ta-c pulse">Loading…</p>
+          <p class="ta-c info">
+            <small>Please make sure you have Javascript enabled.</small>
+          </p>
+        </app>
       </div>
     </section>
     <footer class="mt-5 ta-c">📰 😬</footer>
@@ -94,13 +88,28 @@
         } catch (_) { return [] }
       }
 
-      new Vue({
-        el: '#app',
-        data: {
-          currentFile: null,
-          fileCount,
-          seen: getSeenCache(),
-          storageKey,
+      Vue.component('app', {
+        template: `<div>
+          <transition-group v-if="hasAudio" class="audio" name="fade" tag="div">
+            <div v-for="file in currentFiles" :key="file.title" class="fade-item">
+              <p v-text="file.title"></p>
+              <audio :src="file.url" controls>
+                😧 Looks like your browser can’t play audio. Try downloading the file below.
+              </audio>
+              <p class="mt-2 ta-c">
+                💾 <a :href="file.url" download>Download audio file</a>
+              </p>
+            </div>
+          </transition-group>
+          <button type="button" name="get-audio" @click="getAudio" v-text="buttonText"/>
+        </div>`,
+        data: function () {
+          return {
+            currentFile: null,
+            fileCount: fileCount,
+            seen: getSeenCache(),
+            storageKey: storageKey,
+          }
         },
         computed: {
           buttonText: function () {
@@ -108,10 +117,14 @@
               '🔄 Get a new audio file' :
               '🎧 Load audio'
           },
-          currentFiles: function () { return [{
-            url: `/audio/${this.currentFile}.mp3`,
-            title: `#${this.currentFile}`,
-          }] },
+          currentFiles: function () {
+            return this.hasAudio ?
+              [{
+                url: `/audio/${this.currentFile}.mp3`,
+                title: `#${this.currentFile}`,
+              }] :
+              []
+          },
           files: function () {
             return Array(this.fileCount)
               .fill()
@@ -145,6 +158,8 @@
           },
         }
       })
+
+      new Vue({ el: '#app' })
     </script>
   </body>
 </html>
