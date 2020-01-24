@@ -2,7 +2,7 @@
 /* global Vue */
 
 var storageKey = 'seenFiles'
-var fileCount = 251
+var fileCount = 301
 
 function getSeenCache () {
   try {
