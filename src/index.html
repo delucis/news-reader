@@ -17,41 +17,7 @@
     <meta name="apple-mobile-web-app-title" content="News Reader">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="#black-translucent">
-    <style>
-      @font-face {
-        font-family: 'gt_cinetyperegular';
-        src: url('/fonts/gt-cinetype-regular-webfont.woff2') format('woff2'),
-             url('/fonts/gt-cinetype-regular-webfont.woff') format('woff');
-        font-weight: normal;
-        font-style: normal;
-      }
-
-      html { font-size: 100%; line-height: 1.5; }
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      *:focus { outline: .125rem solid #ff0; }
-      body { font-family: 'gt_cinetyperegular', sans-serif; padding: 5%; background: #00f; color: #ff0; }
-      h1 { font-weight: 400; line-height: 1; margin: 1em 0; }
-      button { display: block; font-size: 1em; padding: .5em; font-family: 'gt_cinetyperegular'; }
-      audio, button { margin: 1em auto; width: 100%; }
-      a { color: #fa8; }
-      .mt-2 { margin-top: 2em; }
-      .mt-5 { margin-top: 5em; }
-      .ta-c { text-align: center; }
-      .info { color: #aa0; }
-      .error { color: #f6f; }
-      .audio { position: relative; height: 12em; }
-      .fade-item { position: absolute; width: 100%; }
-      .fade-enter-active {
-        transition: opacity .4s .15s ease-in, transform .4s .15s ease-out;
-      }
-      .fade-leave-active {
-        transition: opacity .3s ease-out, transform .3s ease-in;
-      }
-      .fade-enter, .fade-leave-to { opacity: 0; }
-      .fade-enter { transform: scaleX(0) scaleY(0.7) translateY(12em); }
-      .fade-leave-to { transform: scaleX(0.4) scaleY(0.7) translateY(-12em); }
-      @media (min-width: 40em) { html { font-size: 200%; } }
-    </style>
+    <link rel="stylesheet" href="/style.css">
   </head>
   <body>
     <header>

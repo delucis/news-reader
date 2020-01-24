@@ -3,10 +3,25 @@
   "description": "Download in-ear audio for “I began the day…”",
   "author": "Chris Swithinbank <swithinbank@gmail.com> (http://chrisswithinbank.net/)",
   "license": "GPL-3.0",
+  "scripts": {
+    "build": "npm run build:css",
+    "build:css": "postcss src/source.css --no-map -u autoprefixer cssnano -o src/style.css",
+    "watch:css": "npm run build:css -- -w"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/delucis/news-reader.git"
   },
   "bugs": "https://github.com/delucis/news-reader/issues",
-  "homepage": "https://npmjs.com/package/news-reader"
+  "homepage": "https://npmjs.com/package/news-reader",
+  "devDependencies": {
+    "autoprefixer": "^9.7.4",
+    "cssnano": "^4.1.10",
+    "postcss-cli": "^7.1.0"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ]
 }
